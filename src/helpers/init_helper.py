@@ -28,7 +28,7 @@ def init_logger(log_dir: str, log_file: str) -> None:
     logger.addHandler(fh)
 
 
-def get_arguments() -> argparse.Namespace:
+def get_parser() -> argparse.ArgumentParser:
     parser = argparse.ArgumentParser()
 
     # model type
@@ -36,6 +36,8 @@ def get_arguments() -> argparse.Namespace:
                         choices=('anchor-based', 'anchor-free'))
 
     # training & evaluation
+    parser.add_argument('--device', type=str, default='cuda',
+                        choices=('cuda', 'cpu'))
     parser.add_argument('--seed', type=int, default=12345)
     parser.add_argument('--splits', type=str, nargs='+', required=True)
     parser.add_argument('--max-epoch', type=int, default=300)
@@ -70,5 +72,10 @@ def get_arguments() -> argparse.Namespace:
     parser.add_argument('--reg-loss', type=str, default='soft-iou',
                         choices=['soft-iou', 'smooth-l1'])
 
+    return parser
+
+
+def get_arguments() -> argparse.Namespace:
+    parser = get_parser()
     args = parser.parse_args()
     return args

@@ -14,7 +14,7 @@ logger = logging.getLogger()
 def train(args, split, save_path):
     model = DSNetAF(base_model=args.base_model, num_feature=args.num_feature,
                     num_hidden=args.num_hidden, num_head=args.num_head)
-    model = model.cuda()
+    model = model.to(args.device)
 
     model.train()
 
@@ -43,7 +43,7 @@ def train(args, split, save_path):
             if not target.any():
                 continue
 
-            seq = torch.tensor(seq, dtype=torch.float32).unsqueeze(0).cuda()
+            seq = torch.tensor(seq, dtype=torch.float32).unsqueeze(0).to(args.device)
 
             cls_label = target
             loc_label = anchor_free_helper.get_loc_label(target)
@@ -51,9 +51,9 @@ def train(args, split, save_path):
 
             pred_cls, pred_loc, pred_ctr = model(seq)
 
-            cls_label = torch.tensor(cls_label, dtype=torch.float32).cuda()
-            loc_label = torch.tensor(loc_label, dtype=torch.float32).cuda()
-            ctr_label = torch.tensor(ctr_label, dtype=torch.float32).cuda()
+            cls_label = torch.tensor(cls_label, dtype=torch.float32).to(args.device)
+            loc_label = torch.tensor(loc_label, dtype=torch.float32).to(args.device)
+            ctr_label = torch.tensor(ctr_label, dtype=torch.float32).to(args.device)
 
             cls_loss = calc_cls_loss(pred_cls, cls_label, args.cls_loss)
             loc_loss = calc_loc_loss(pred_loc, loc_label, cls_label,
@@ -69,7 +69,7 @@ def train(args, split, save_path):
             stats.update(loss=loss.item(), cls_loss=cls_loss.item(),
                          loc_loss=loc_loss.item(), ctr_loss=ctr_loss.item())
 
-        val_fscore, _ = evaluate(model, val_loader, args.nms_thresh)
+        val_fscore, _ = evaluate(model, val_loader, args.nms_thresh, args.device)
 
         if max_val_fscore < val_fscore:
             max_val_fscore = val_fscore

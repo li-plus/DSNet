@@ -10,14 +10,14 @@ from modules.model_zoo import get_model
 logger = logging.getLogger()
 
 
-def evaluate(model, val_loader, nms_thresh):
+def evaluate(model, val_loader, nms_thresh, device):
     model.eval()
     stats = data_helper.AverageMeter('fscore', 'diversity')
 
     with torch.no_grad():
         for test_key, seq, _, cps, n_frames, nfps, picks, user_summary in val_loader:
             seq_len = len(seq)
-            seq_torch = torch.from_numpy(seq).unsqueeze(0).cuda()
+            seq_torch = torch.from_numpy(seq).unsqueeze(0).to(device)
 
             pred_cls, pred_bboxes = model.predict(seq_torch)
 
@@ -46,7 +46,7 @@ def main():
 
     logger.info(args)
     model = get_model(args.model, **vars(args))
-    model = model.eval().cuda()
+    model = model.eval().to(args.device)
 
     for split_path in args.splits:
         split_path = Path(split_path)
@@ -63,7 +63,7 @@ def main():
             val_set = data_helper.VideoDataset(split['test_keys'])
             val_loader = data_helper.DataLoader(val_set, shuffle=False)
 
-            fscore, diversity = evaluate(model, val_loader, args.nms_thresh)
+            fscore, diversity = evaluate(model, val_loader, args.nms_thresh, args.device)
             stats.update(fscore=fscore, diversity=diversity)
 
             logger.info(f'{split_path.stem} split {split_idx}: diversity: '

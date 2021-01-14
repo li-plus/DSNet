@@ -32,7 +32,7 @@ pip install -r requirements.txt
 
 ## Datasets Preparation
 
-Download the pre-processed datasets into `datasets/` folder.
+Download the pre-processed datasets into `datasets/` folder, including [TVSum](https://github.com/yalesong/tvsum), [SumMe](https://gyglim.github.io/me/vsum/index.html), [OVP](https://sites.google.com/site/vsummsite/download), and [YouTube](https://sites.google.com/site/vsummsite/download) datasets.
 
 ```sh
 mkdir -p datasets/ && cd datasets/
@@ -106,40 +106,6 @@ For anchor-free models, remember to specify NMS threshold as 0.4.
 python evaluate.py anchor-free --model-dir ../models/af_basic/ --splits ../splits/tvsum.yml ../splits/summe.yml --nms-thresh 0.4
 ```
 
-## Generating Splits
-
-If you want to generate your own splits, use `make_split.py`.
-
-To generate a canonical split on TVSum, run
-
-```sh
-python make_split.py --save-path ../splits_custom/tvsum.yml \
-    --dataset ../datasets/eccv16_dataset_tvsum_google_pool5.h5
-```
-
-To create an augmented split on TVSum, run
-
-```sh
-python make_split.py --save-path ../splits_custom/tvsum_aug.yml \
-    --dataset ../datasets/eccv16_dataset_tvsum_google_pool5.h5 \
-    --extra-datasets ../datasets/eccv16_dataset_summe_google_pool5.h5 \
-                     ../datasets/eccv16_dataset_ovp_google_pool5.h5 \
-                     ../datasets/eccv16_dataset_youtube_google_pool5.h5
-```
-
-For a transfer split on TVSum, run
-
-```sh
-python make_split.py --save-path ../splits_custom/tvsum_trans.yml \
-    --dataset ../datasets/eccv16_dataset_tvsum_google_pool5.h5 \
-    --extra-datasets ../datasets/eccv16_dataset_summe_google_pool5.h5 \
-                     ../datasets/eccv16_dataset_ovp_google_pool5.h5 \
-                     ../datasets/eccv16_dataset_youtube_google_pool5.h5 \
-    --train-ratio 0
-```
-
-You may also generate splits on SumMe by changing the `--dataset` and `--extra-dataset` arguments. For more options, run `python make_split.py --help`.
-
 ## Generating Shots with KTS
 
 Based on the public datasets provided by [DR-DSN](https://github.com/KaiyangZhou/pytorch-vsumm-reinforce), we apply [KTS](https://github.com/pathak22/videoseg/tree/master/lib/kts) algorithm to generate video shots for OVP and YouTube datasets. Note that the pre-processed datasets already contain these video shots. To re-generate video shots, run
@@ -153,9 +119,9 @@ python make_shots.py --dataset ../datasets/eccv16_dataset_youtube_google_pool5.h
 
 We gratefully thank the below open-source repo, which greatly boost our research.
 
-+ [KTS](https://github.com/pathak22/videoseg/tree/master/lib/kts)
-+ [DR-DSN](https://github.com/KaiyangZhou/pytorch-vsumm-reinforce)
-+ [VASNet](https://github.com/ok1zjf/VASNet)
++ Thank [KTS](https://github.com/pathak22/videoseg/tree/master/lib/kts) for the effective shot generation algorithm.
++ Thank [DR-DSN](https://github.com/KaiyangZhou/pytorch-vsumm-reinforce) for the pre-processed public datasets.
++ Thank [VASNet](https://github.com/ok1zjf/VASNet) for the training and evaluation pipeline.
 
 ## Citation
 
@@ -166,6 +132,8 @@ If you find our codes or paper helpful, please consider citing.
   title={DSNet: A Flexible Detect-to-Summarize Network for Video Summarization},
   author={Zhu, Wencheng and Lu, Jiwen and Li, Jiahao and Zhou, Jie},
   journal={IEEE Transactions on Image Processing},
+  volume={30},
+  pages={948--962},
   year={2020}
 }
 ```

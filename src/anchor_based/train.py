@@ -25,7 +25,7 @@ def train(args, split, save_path):
     model = DSNet(base_model=args.base_model, num_feature=args.num_feature,
                   num_hidden=args.num_hidden, anchor_scales=args.anchor_scales,
                   num_head=args.num_head)
-    model = model.cuda()
+    model = model.to(args.device)
 
     model.apply(xavier_init)
 
@@ -78,10 +78,10 @@ def train(args, split, save_path):
             cls_label[cls_label_neg == -1] = -1
             cls_label[cls_label_incomplete == -1] = -1
 
-            cls_label = torch.tensor(cls_label, dtype=torch.float32).cuda()
-            loc_label = torch.tensor(loc_label, dtype=torch.float32).cuda()
+            cls_label = torch.tensor(cls_label, dtype=torch.float32).to(args.device)
+            loc_label = torch.tensor(loc_label, dtype=torch.float32).to(args.device)
 
-            seq = torch.tensor(seq, dtype=torch.float32).unsqueeze(0).cuda()
+            seq = torch.tensor(seq, dtype=torch.float32).unsqueeze(0).to(args.device)
 
             pred_cls, pred_loc = model(seq)
 
@@ -97,7 +97,7 @@ def train(args, split, save_path):
             stats.update(loss=loss.item(), cls_loss=cls_loss.item(),
                          loc_loss=loc_loss.item())
 
-        val_fscore, _ = evaluate(model, val_loader, args.nms_thresh)
+        val_fscore, _ = evaluate(model, val_loader, args.nms_thresh, args.device)
 
         if max_val_fscore < val_fscore:
             max_val_fscore = val_fscore
