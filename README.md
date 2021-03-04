@@ -1,4 +1,4 @@
-# DSNet: A Flexible Detect-to-Summarize Network for Video Summarization
+# DSNet: A Flexible Detect-to-Summarize Network for Video Summarization [[paper]](https://ieeexplore.ieee.org/document/9275314)
 
 [![UnitTest](https://github.com/li-plus/DSNet/workflows/UnitTest/badge.svg)](https://github.com/li-plus/DSNet/actions)
 [![License: MIT](https://img.shields.io/badge/license-MIT-blue)](https://github.com/li-plus/DSNet/blob/main/LICENSE)
@@ -17,11 +17,11 @@ First, clone this project to your local environment.
 git clone https://github.com/li-plus/DSNet.git
 ```
 
-Create a virtual environment with python >= 3.6.
+Create a virtual environment with python >= 3.6, preferably using [Anaconda](https://www.anaconda.com/).
 
 ```sh
-virtualenv -p /usr/bin/python3.8 dsnet
-. dsnet/bin/activate
+conda create --name dsnet python=3.8
+conda activate dsnet
 ```
 
 Install python dependencies.
@@ -56,6 +56,36 @@ DSNet
     ├── eccv16_dataset_youtube_google_pool5.h5
     └── readme.txt
 ```
+
+## Pre-trained Models
+
+Our pre-trained models are now available online. You may download them for evaluation, or you may skip this section and train a new one from scratch.
+
+```sh
+mkdir -p models && cd models
+# anchor-based model
+wget https://www.dropbox.com/s/0jwn4c1ccjjysrz/pretrain_ab_basic.zip
+unzip pretrain_ab_basic.zip
+# anchor-free model
+wget https://www.dropbox.com/s/2hjngmb0f97nxj0/pretrain_af_basic.zip
+unzip pretrain_af_basic.zip
+```
+
+To evaluate our pre-trained models, type:
+
+```sh
+# evaluate anchor-based model
+python evaluate.py anchor-based --model-dir ../models/pretrain_ab_basic/ --splits ../splits/tvsum.yml ../splits/summe.yml
+# evaluate anchor-free model
+python evaluate.py anchor-free --model-dir ../models/pretrain_af_basic/ --splits ../splits/tvsum.yml ../splits/summe.yml --nms-thresh 0.4
+```
+
+If everything works fine, you will get similar results as follows.
+
+|              | TVSum | SumMe |
+| ------------ | ----- | ----- |
+| Anchor-based | 62.05 | 50.19 |
+| Anchor-free  | 61.86 | 51.18 |
 
 ## Training
 

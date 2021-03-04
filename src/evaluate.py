@@ -44,7 +44,7 @@ def main():
     init_helper.init_logger(args.model_dir, args.log_file)
     init_helper.set_random_seed(args.seed)
 
-    logger.info(args)
+    logger.info(vars(args))
     model = get_model(args.model, **vars(args))
     model = model.eval().to(args.device)
 

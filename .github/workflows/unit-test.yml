@@ -24,7 +24,6 @@ jobs:
       run: |
         python -m pip install --upgrade pip setuptools wheel
         pip install h5py ortools pyyaml numpy torch==1.7.0
-        python -c "import torch; print(torch.version.cuda); print(torch.cuda.is_available())"
         pip install torch-scatter -f https://pytorch-geometric.com/whl/torch-1.7.0+cpu.html
         pip install torch-sparse -f https://pytorch-geometric.com/whl/torch-1.7.0+cpu.html
         pip install torch-geometric

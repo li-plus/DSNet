@@ -24,7 +24,7 @@ def main():
     init_helper.init_logger(args.model_dir, args.log_file)
     init_helper.set_random_seed(args.seed)
 
-    logger.info(args)
+    logger.info(vars(args))
 
     model_dir = Path(args.model_dir)
     model_dir.mkdir(parents=True, exist_ok=True)

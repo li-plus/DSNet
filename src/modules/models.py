@@ -2,7 +2,6 @@ import math
 
 import torch
 from torch import nn
-from torch_geometric.nn import GCNConv
 
 
 class ScaledDotProductAttention(nn.Module):
@@ -73,6 +72,7 @@ class AttentionExtractor(MultiHeadAttention):
 class GCNExtractor(nn.Module):
     def __init__(self, num_feature):
         super().__init__()
+        from torch_geometric.nn import GCNConv
         self.gcn = GCNConv(num_feature, num_feature)
 
     def forward(self, x):

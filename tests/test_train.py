@@ -63,5 +63,5 @@ def mock_dump_yaml(obj, path):
 @mock.patch.object(train.data_helper.h5py, 'File', MockH5pyFile)
 @mock.patch.object(train.data_helper, 'load_yaml', mock_load_yaml)
 @mock.patch.object(train.data_helper, 'dump_yaml', mock_dump_yaml)
-def test_get_arguments():
+def test_train():
     train.main()
