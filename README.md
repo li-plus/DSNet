@@ -17,10 +17,10 @@ First, clone this project to your local environment.
 git clone https://github.com/li-plus/DSNet.git
 ```
 
-Create a virtual environment with python >= 3.6, preferably using [Anaconda](https://www.anaconda.com/).
+Create a virtual environment with python 3.6, preferably using [Anaconda](https://www.anaconda.com/).
 
 ```sh
-conda create --name dsnet python=3.8
+conda create --name dsnet python=3.6
 conda activate dsnet
 ```
 
@@ -80,7 +80,7 @@ python evaluate.py anchor-based --model-dir ../models/pretrain_ab_basic/ --split
 python evaluate.py anchor-free --model-dir ../models/pretrain_af_basic/ --splits ../splits/tvsum.yml ../splits/summe.yml --nms-thresh 0.4
 ```
 
-If everything works fine, you will get similar results as follows.
+If everything works fine, you will get similar F-score results as follows.
 
 |              | TVSum | SumMe |
 | ------------ | ----- | ----- |

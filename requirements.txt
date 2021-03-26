@@ -1,7 +1,7 @@
-h5py==2.9.0
+h5py==3.1.0
 ortools==8.0.8283
-pyyaml==5.1.2
-numpy==1.17.3
+pyyaml==5.4.1
+numpy==1.19.5
 torch==1.1.0
 torch-scatter==1.4.0
 torch-sparse==0.4.3
