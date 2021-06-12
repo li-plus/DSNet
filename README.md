@@ -145,6 +145,42 @@ python make_shots.py --dataset ../datasets/eccv16_dataset_ovp_google_pool5.h5
 python make_shots.py --dataset ../datasets/eccv16_dataset_youtube_google_pool5.h5
 ```
 
+## Using Custom Videos
+
+### Training & Validation
+
+We provide scripts to pre-process custom video data, like the raw videos in `custom_data` folder.
+
+First, create an h5 dataset. Here `--video-dir` contains several MP4 videos, and `--label-dir` contains ground truth user summaries for each video. The user summary of a video is a UxN binary matrix, where U denotes the number of annotators and N denotes the number of frames in the original video.
+
+```sh
+python make_dataset.py --video-dir ../custom_data/videos --label-dir ../custom_data/labels \
+  --save-path ../custom_data/custom_dataset.h5 --sample-rate 15
+```
+
+Then split the dataset into training and validation sets and generate a split file to index them.
+
+```sh
+python make_split.py --dataset ../custom_data/custom_dataset.h5 \
+  --train-ratio 0.67 --save-path ../custom_data/custom.yml
+```
+
+Now you may train on your custom videos using the split file.
+
+```sh
+python train.py anchor-based --model-dir ../models/custom --splits ../custom_data/custom.yml
+python evaluate.py anchor-based --model-dir ../models/custom --splits ../custom_data/custom.yml
+```
+
+### Inference
+
+To predict the summary of a raw video, use `infer.py`. For example, run
+
+```sh
+python infer.py anchor-based --ckpt-path ../models/custom/checkpoint/custom.yml.0.pt \
+  --source ../custom_data/videos/EE-bNr36nyA.mp4 --save-path ./output.mp4
+```
+
 ## Acknowledgments
 
 We gratefully thank the below open-source repo, which greatly boost our research.

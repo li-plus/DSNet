@@ -1,5 +1,4 @@
 import argparse
-import math
 import random
 from pathlib import Path
 
@@ -64,7 +63,7 @@ def main():
         extra_keys += extra_dataset_keys
 
     num_videos = len(keys)
-    num_train = int(math.ceil(num_videos * args.train_ratio))
+    num_train = round(num_videos * args.train_ratio)
     num_test = num_videos - num_train
 
     if args.method == 'random':

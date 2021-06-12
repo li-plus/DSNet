@@ -24,7 +24,7 @@ def main():
         picks = np.arange(0, seq_len) * 15
 
         kernel = np.matmul(features, features.T)
-        change_points, _ = cpd_auto(kernel, seq_len - 1, 1)
+        change_points, _ = cpd_auto(kernel, seq_len - 1, 1, verbose=False)
         change_points *= 15
         change_points = np.hstack((0, change_points, n_frames))
         begin_frames = change_points[:-1]
